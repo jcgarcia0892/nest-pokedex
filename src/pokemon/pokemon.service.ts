@@ -1,3 +1,4 @@
+import { PaginationDto } from './../common/dto/pagination.dto';
 import {
   BadRequestException,
   Injectable,
@@ -28,8 +29,13 @@ export class PokemonService {
     }
   }
 
-  findAll() {
-    return `This action returns all pokemon`;
+  async findAll({ limit = 10, offset = 0 }: PaginationDto) {
+    return await this.pokemonModel
+      .find()
+      .limit(limit)
+      .skip(offset)
+      .sort({ no: 1 }) // Order by number ascending way.
+      .select('-__v'); // Delete the property __v
   }
 
   async findOne(term: string) {
